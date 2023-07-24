@@ -2,7 +2,7 @@
     "name": "nickmoline/laravel-stardate",
     "description": "A Laravel package to convert dates to stardates.",
     "type": "library",
-    "license": "GPL3",
+    "license": "GPL-3.0-or-later",
     "authors": [
         {
             "name": "Nick Moline",
