@@ -53,4 +53,29 @@ class TngStardatesTest extends TestCase
         $this->assertEquals(7, $farpoint->diffInYears($allGoodThings));
     }
 
+    /**
+     * @dataProvider provideTestContemporaryDates
+     */
+    public function testContemporaryDates(string $date, float|string $stardate)
+    {
+        $this->assertEquals($stardate, Carbon::parse($date)->contemporaryStardate());
+    }
+
+    public function provideTestContemporaryDates() : array
+    {
+        return [
+            'Stardate 41000.0' => ['1987-07-15 07:00:00', '41000.0'],
+            'Stardate 74077.2' => ['2023-07-23 07:00:00', '74077.2'],
+            'Stardate 47295.5' => ['1994-05-23 10:00:00', '47295.5']
+        ];
+    }
+
+    /**
+     * @dataProvider provideTestContemporaryDates
+     */
+    public function testCreateFromContemporaryStardate(string $date, float|string $stardate)
+    {
+        $expectedDate = Carbon::parse($date);
+        $this->assertEquals($expectedDate->format("Y-m-d"), Carbon::createFromContemporaryStardate($stardate)->format("Y-m-d"));
+    }
 }
