@@ -1,0 +1,40 @@
+{
+    "name": "nickmoline/laravel-stardate",
+    "description": "A Laravel package to convert dates to stardates.",
+    "type": "library",
+    "license": "GPL3",
+    "authors": [
+        {
+            "name": "Nick Moline",
+            "email": "nick@nick.pro"
+        }
+    ],
+    "require": {
+        "illuminate/support": ">=9.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^8.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Holodeck3\\Stardate\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Holodeck3\\Stardate\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "post-autoload-dump": [
+            "@php vendor/bin/testbench package:discover --ansi"
+        ]
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Holodeck3\\Stardate\\StardateServiceProvider"
+            ]
+        }
+    }
+}
