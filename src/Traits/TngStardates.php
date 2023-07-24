@@ -5,28 +5,44 @@ namespace Holodeck3\Stardate\Traits;
 use Holodeck3\Stardate\StardateServiceProvider;
 use Illuminate\Support\Carbon;
 
-trait TngStardates {
-    public const zeroDate = '2318-07-05 12:00:00'; // July 5, 2318 at roughly noon Starfleet Command Time is Stardate 00000.0
-    public const starfleetCommandZone = 'America/Los_Angeles'; // Starfleet Command is in San Francisco
-    public const millisecondsPerStarDate = 34367056.4; // 1 Stardate = 34367056.4 milliseconds
+trait TngStardates
+{
+    protected $tngZeroDate = '2318-07-05 12:00:00'; // July 5, 2318 at roughly noon Starfleet Command Time is Stardate 00000.0
+    protected $starfleetCommandZone = 'America/Los_Angeles'; // Starfleet Command is in San Francisco
+    protected $millisecondsPerTngStardate = 34367056.4; // 1 Stardate = 34367056.4 milliseconds
+
+    public static function tngZeroDate() : string
+    {
+        return self::$tngZeroDate;
+    }
+
+    public static function starfleetCommandZone() : string
+    {
+        return self::$starfleetCommandZone;
+    }
+
+    public static function millisecondsPerTngStardate() : float
+    {
+        return self::$millisecondsPerTngStardate;
+    }
 
     public function registerTngStardates() : void
     {
         Carbon::macro('tngStardate', function (int $precision = 1) : string {
             // Calculation from http://trekguide.com/Stardates.htm
-            $zeroDate = Carbon::parse(StardateServiceProvider::zeroDate, StardateServiceProvider::starfleetCommandZone);
+            $zeroDate = Carbon::parse(StardateServiceProvider::tngZeroDate(), StardateServiceProvider::starfleetCommandZone());
 
             $diffInMiliseconds = $zeroDate->diffInMilliseconds($this, false);
-            $stardate = round($diffInMiliseconds / StardateServiceProvider::millisecondsPerStarDate, $precision, PHP_ROUND_HALF_UP);
+            $stardate = round($diffInMiliseconds / StardateServiceProvider::millisecondsPerTngStardate(), $precision, PHP_ROUND_HALF_UP);
 
             return sprintf("%07.{$precision}f", $stardate);
         });
 
         Carbon::macro('createFromStardate', function (float|string $stardate) : Carbon {
             // Calculation from http://trekguide.com/Stardates.htm
-            $zeroDate = Carbon::parse(StardateServiceProvider::zeroDate, StardateServiceProvider::starfleetCommandZone);
+            $zeroDate = Carbon::parse(StardateServiceProvider::tngZeroDate(), StardateServiceProvider::starfleetCommandZone());
 
-            $diffInMiliseconds = $stardate * StardateServiceProvider::millisecondsPerStarDate;
+            $diffInMiliseconds = $stardate * StardateServiceProvider::millisecondsPerTngStardate();
             $date = $zeroDate->addMilliseconds($diffInMiliseconds);
 
             return $date;

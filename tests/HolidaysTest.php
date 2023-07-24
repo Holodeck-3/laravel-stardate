@@ -8,10 +8,17 @@ class HolidaysTest extends TestCase
 {
     public function testFirstContactDay()
     {
-        $this->assertTrue(Carbon::parse('2063-04-05')->isFirstContactDay());
-        $this->assertFalse(Carbon::parse('2063-04-06')->isFirstContactDay());
-        $this->assertTrue(Carbon::parse('2063-04-06')->nextFirstContactDay()->isFirstContactDay());
-        $this->assertTrue(Carbon::parse('2063-04-04')->lastFirstContactDay()->isFirstContactDay());
-        $this->assertEquals('4 days', Carbon::parse('2063-04-01')->untilFirstContactDay()->forHumans());
+        $april1 = Carbon::parse('2063-04-01');
+        $april4 = Carbon::parse('2063-04-04');
+        $april5 = Carbon::parse('2063-04-05');
+        $april6 = Carbon::parse('2063-04-06');
+
+        $this->assertTrue($april5->isFirstContactDay());
+        $this->assertEquals("First Contact Day", $april5->trekHoliday());
+
+        $this->assertFalse($april6->isFirstContactDay());
+        $this->assertTrue($april6->nextFirstContactDay()->isFirstContactDay());
+        $this->assertTrue($april4->lastFirstContactDay()->isFirstContactDay());
+        $this->assertEquals('4 days', $april1->untilFirstContactDay()->forHumans());
     }
 }
